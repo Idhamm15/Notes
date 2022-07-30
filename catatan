@@ -1,0 +1,1871 @@
+perintah dalam pemrograman r:
+c = mengurutkan data ,contoh c(10:40)
+print = mencetak
+
+
+
+3 tipe data dalam pemrograman r :
+    vector,
+    list, dan
+    data frame.
+
+Kesimpulan
+
+Kamu telah mempelajari mengenai tiga tipe data fundamental yang sangat penting di R di bab ini, yaitu vector, list dan data frame. Ketiga tipe data ini dapat diisi dengan lebih dari satu nilai.
+
+Ringkasan dari tipe-tipe data tersebut adalah sebagai berikut.
+
+    Vector hanya dapat diisi dengan salah satu tipe data saja di seluruh elemennya, misalnya angka saja ataupun teks saja. Pembuatan vector menggunakan fungsi c, dan bisa diakses dengan accessor dengan angka indeks yang diapit kurung siku. Namun, jika berupa named vector, maka indeksnya adalah berupa teks.
+    List adalah tipe data yang bisa diisi dengan lebih dari satu tipe data di seluruh elemennya, dengan campuran teks dan angka. Pembuatan list adalah menggunakan fungsi list, dan elemen pada list dapat diakses dengan accessor yang diapit kurung siku seperti pada vector.
+    Data Frame adalah tipe data yang terdiri dari satu atau beberapa vector ataupun list. Untuk membuat data frame kita menggunakan fungsi data.frame. Data frame ini dapat diakses dengan menggunakan accessor $ diikuti nama kolom, dan juga angka indeks.
+
+Dengan memahami penggunaan vector, list dan data frame kita siap mempelajari penggunaan banyak fungsi lanjutan di R, seperti menghasilkan grafik dan penggunaan algoritma machine learning.
+
+
+ggplot2 :
+contoh coding sederhana
+fakultas <- c("Bisnis", "D3 Perhotelan", "ICT", "Ilmu Komunikasi", "Seni dan Desain")
+jumlah_mahasiswa <- c(260, 28, 284, 465, 735)
+akreditasi <- c("A","A","B","A","A")
+
+info_mahasiswa <- data.frame(fakultas, jumlah_mahasiswa, akreditasi)
+info_mahasiswa
+
+#Menggunakan package ggplot2
+library("ggplot2")
+
+#Membuat kanvas
+gambar <- ggplot(info_mahasiswa, aes(x=fakultas, y=jumlah_mahasiswa, fill=fakultas))
+gambar <- gambar + geom_bar(width=1, stat="identity")
+gambar
+
+coding menambahkan judul pada sumbu x dan y :
+#Membuat dua vector
+fakultas <- c("Bisnis", "D3 Perhotelan", "ICT", "Ilmu Komunikasi", "Seni dan Desain")
+jumlah_mahasiswa <- c(260, 28, 284, 465, 735)
+akreditasi <- c("A","A","B","A","A")
+
+#Buat data frame dari ketiga vector di atas
+info_mahasiswa <- data.frame(fakultas, jumlah_mahasiswa, akreditasi)
+info_mahasiswa
+
+#Menggunakan package ggplot2
+library(ggplot2)
+
+#Membuat kanvas
+gambar <- ggplot(info_mahasiswa, aes(x=fakultas, y=jumlah_mahasiswa, fill=fakultas))
+
+#Menambahkan objek bar chart, simpan kembali sebagai variable gambar
+gambar <- gambar + geom_bar(width=1, stat="identity")
+
+#Menambahkan judul grafik
+gambar <- gambar + ggtitle("Jumlah Mahasiswa per Fakultas")
+#Menambahkan caption pada sumbu x
+gambar <- gambar + xlab("Nama Fakultas")
+#Menambahkan caption pada sumbu y
+gambar <- gambar + ylab("Jumlah Mahasiswa")
+#Menggambar grafik
+gambar
+
+
+coding ata Visualization with ggplot2 in R":
+library(ggplot2)
+#Menggunakan package openxlsx
+library(openxlsx)
+
+#Membaca file mahasiswa.xlsx
+mahasiswa <- read.xlsx("https://storage.googleapis.com/dqlab-dataset/mahasiswa.xlsx",sheet = "Sheet 1")
+
+#Menghitung Jumlah Data by Fakultas
+summarybyfakultas <- aggregate(x=mahasiswa$JUMLAH, by=list(Kategori=mahasiswa$Fakultas, Tahun=mahasiswa$ANGKATAN), FUN=sum)
+summarybyfakultas <- setNames(summarybyfakultas, c("fakultas","tahun", "jumlah_mahasiswa"))
+summarybyfakultas
+
+summarybyfakultas$tahun = as.factor(summarybyfakultas$tahun)
+
+ggplot(summarybyfakultas, aes(x=fakultas, y=jumlah_mahasiswa)) + 
+  geom_bar(stat = "identity", aes(fill = tahun), width=0.8, position = position_dodge(width=0.8)) + 
+  theme_classic() 
+
+
+coding pie chart :
+library(ggplot2)
+library(openxlsx)
+#Membaca file mahasiswa.xlsx
+mahasiswa <- read.xlsx("https://storage.googleapis.com/dqlab-dataset/mahasiswa.xlsx",sheet = "Sheet 1")
+
+#Menghitung Jumlah Data by Fakultas
+summarybyfakultas <- aggregate(x=mahasiswa$JUMLAH, by=list(Kategori=mahasiswa$Fakultas), FUN=sum)
+summarybyfakultas <- setNames(summarybyfakultas, c("fakultas","jumlah_mahasiswa"))
+
+piechart<- ggplot(summarybyfakultas, aes(x="", y=jumlah_mahasiswa, fill=fakultas))+ geom_bar(width = 1, stat = "identity")
+piechart <- piechart + coord_polar("y", start=0)
+piechart <- piechart + ggtitle("Disribusi Mahasiswa per Fakultas")
+piechart <- piechart + scale_fill_brewer(palette="Blues")+ theme_minimal()
+piechart <- piechart + guides(fill=guide_legend(title="Fakultas"))
+piechart <- piechart + ylab("Jumlah Mahasiswa") 
+piechart
+
+
+
+
+R for data science
+Data kuantitatif adalah data yang dapat di lakukan operasi matematika
+Data Ordinal adalah data yang hanya membedakan antar kategori
+Data Kategorik adalah data Kualitatif
+Semua data harus dalam bentuk angka untuk dilakukan analisis statistik
+Data Kategorik tidak dapat di analisis statistik
+
+Melihat tipe data dengan str :
+Contoh : str(data_intro)
+
+mengubah tipe data pelanggan dan nama menjadi character
+contoh coding:
+## mengubah data menjadi karakter karena tidak dilakukan analisis statistik pada variabel ID Pelanggan dan nama
+data_intro$ID.Pelanggan <-
+as.character(data_intro$ID.Pelanggan)
+data_intro$ID.Nama <-
+as.character(data_intro$Nama)
+## melihat apakah sudah berhasil dalam mengubah variabel tersebut
+str(data_intro$ID.Pelanggan)
+str(data_intro$Nama)
+
+Mengubah Tipe Data Kolom ID.Pelanggan dan nama menjadi Character :
+## mengubah data menjadi karakter karena tidak dilakukan analisis statistik pada variabel ID Pelanggan dan nama
+data_intro$ID.Pelanggan <-as.character(data_intro$ID.Pelanggan)
+data_intro$Nama <-as.character(data_intro$Nama)
+## melihat apakah sudah berhasil dalam mengubah variabel tersebut
+str(data_intro$ID.Pelanggan)
+str(data_intro$Nama)
+
+Mengubah Sejumlah Kolom menjadi Data Kategorik (Factor) :
+## Mengubah data menjadi factor untuk membedakan data kualitatif dengan menggunakan functon as.factor
+data_intro$Jenis.Kelamin <-as.factor(data_intro$Jenis.Kelamin)
+data_intro$Produk <-as.factor(data_intro$Produk)
+data_intro$Tingkat.Kepuasan <-as.factor(data_intro$Tingkat.Kepuasan)
+## Melihat apakah sudah berhasil dalam mengubah variabel tersebut dengan menggunakan function str
+str(data_intro$Jenis.Kelamin)
+str(data_intro$Produk)
+str(data_intro$Tingkat.Kepuasan)
+
+Skala Pengukuran Data :
+# melihat data/ pemanggilan data
+data_intro
+# melihat tipe data
+str(data_intro)
+
+Estimasi Nilai Statistik Modus pada kolom produk dan tingkat kepuasan :
+contoh coding :
+library(pracma)
+## carilah modus untuk kolom Produk pada variable data_intro
+Mode(data_intro$Produk)
+## carilah modus untuk kolom Tingkat.Kepuasan pada variable data_intro
+Mode(data_intro$Tingkat.Kepuasan)
+
+
+Estimasi Nilai Statistik Median ari kolom Pendapatan, Harga, Jumlah dan Total :
+contoh coding :
+## carilah median untuk kolom Pendapatan dari variable data_intro
+median(data_intro$Pendapatan)
+
+## carilah median untuk  kolom Harga dari variable data_intro
+median(data_intro$Harga)
+
+## carilah median untuk kolom Jumlah dari variable data_intro
+median(data_intro$Jumlah)
+
+## carilah median untuk  kolom Total dari variable data_intro
+median(data_intro$Total)
+
+Estimasi Nilai Statistik Rata-Rata :
+contoh coding :
+## carilah mean untuk kolom Pendapatan pada variable data_intro
+mean(data_intro$Pendapatan)
+## carilah mean untuk kolom Harga pada variable data_intro
+mean(data_intro$Harga)
+## carilah mean untuk kolom Jumlah pada variable data_intro
+mean(data_intro$Jumlah)
+## carilah mean untuk kolom Total pada variable data_intro
+mean(data_intro$Total)
+
+Estimasi Nilai Sebaran Data Range :
+contoh coding :
+## carilah range untuk kolom Pendapatan pada variable data_intro
+max(data_intro$Pendapatan)-min(data_intro$Pendapatan)
+
+
+Estimasi Nilai Sebaran Data Varians kolom pendapatan :
+contoh coding :
+## Carilah varians untuk kolom Pendapatan dari variable data_intro
+var(data_intro$Pendapatan)
+
+
+Estimasi Nilai Sebaran Data Simpangan Baku kolom pendapatan :
+coding : 
+## Carilah simpangan baku untuk kolom Pendapatan dari variable data_intro
+sd(data_intro$Pendapatan)
+
+Kesimpulan
+
+Dari pembahasan materi diatas maka kesimpulannya sebagai berikut:
+
+    Statistik merupakan ilmu pengolahan, penyajian dan analisis data.
+    Jenis-jenis data yaitu nominal, ordinal, interval, dan rasion.
+    Estimasi karakteristik data yang sering digunakan diantaranya mean, median dan modus.
+    Jenis sebaran data diantaranya range (jarak), standar deviasi, dan varians.
+
+
+Analisis Deskriptif Menggunakan Nilai Statistik
+
+Untuk melakukan analisis deskriptif setiap variabel pada R, kita dapat menggunakan function berikut :
+
+summary(data_intro)
+
+Function summary akan menampilkan kesimpulan pada variabel masing-masing. Untuk variabel bertipe character akan menampilkan panjang datanya. Variabel bertipe factor akan menampilkan jumlah data pada masing-masing kelas. Sedangkan untuk variabel bertipe numerik akan memunculkan nilai minimum, Q1,Q2 (median), Q3, mean, dan maximum.
+
+Pengertian dari masing-masing istilah itu adalah sebagai berikut :
+
+    Minimum adalah nilai observasi terkecil.
+    Kuartil pertama (Q1), yang memotong 25 % dari data terendah.
+    Median (Q2) atau nilai pertengahan.
+    Kuartil ketiga (Q3), yang memotong 25 % dari data tertinggi.
+    Maksimum adalah nilai observasi terbesar.
+contoh coding :
+## carilah summary data dari data_intro
+summary(data_intro)
+
+
+Analisis Deskriptif Menggunakan Visualisasi
+
+Setelah melakukan analisis deskriptif sebelumnya, agar lebih jelas bagaimana gambaran/sebaran dari data maka kita perlu membuat grafik dari masing-masing variabel. Grafik disini juga dapat sebagai analisis eskplorasi yang akan membantu dalam membangun hipotesis.
+
+Untuk mendapatkan visualisasi dasar dari setiap variabel pada R bisa menggunakan perintah berikut :
+
+plot(data_intro$Jenis.Kelamin)
+
+hist(data_intro$Pendapatan)
+
+Berikut penjelasan function diatas :
+
+    plot digunakan untuk variabel bertipe Factor - function ini menghasilkan grafik Bar Plot.
+    hist untuk variabel bertipe numerik seperti int - function ini menghasilkan grafik Histogram.
+
+Tujuan dari plot dan hist adalah untuk mengetahui sebaran data.
+
+contoh coding :
+## Carilah sebaran data kolom Jenis.Kelamin dari variable data_intro
+plot(data_intro$Jenis.Kelamin)
+
+## Carilah sebaran data dari Pendapatan dari variable data_intro
+hist(data_intro$Pendapatan)
+## Carilah sebaran data dari Produk dari variable data_intro
+plot(data_intro$Produk)
+
+## Carilah sebaran data dari Harga dari variable data_intro
+hist(data_intro$Harga)
+
+## Carilah sebaran data dari Jumlah dari variable data_intro
+hist(data_intro$Jumlah)
+
+## Carilah sebaran data dari Total dari variable data_intro
+hist(data_intro$Total)
+
+## Carilah sebaran data dari Tingkat.Kepuasan dari variable data_intro
+plot(data_intro$Tingkat.Kepuasan)
+
+Scatter Plot
+
+Sebelum melakukan analisis korelasi sebaiknya kita melihat hubungan dari dua variabel numerik menggunakan scatter plot. Scatter plot dapat disebut juga analisis deskriptif.
+
+Untuk melakukan scatter plot pada R menggunakan perintah plot seperti berikut :
+
+plot(data_intro$Pendapatan,data_intro$Total)
+
+Variabel pertama yaitu data_intro$Pendapatan akan diplot untuk sumbu x, sedangkan variabel kedua yaitu data_intro$Total untuk sumbu y.
+
+Hubungan Pendapatan dengan Total Belanja dengan cor.test
+
+Setelah melihat hubungan variabel pendapatan dengan total belanja menggunakan scatter plot diatas maka kita akan mengujinya, apakah benar-benar pendapatan memiliki pengaruh positif terhadap total belanja
+
+Untuk melakukan uji korelasi pada R menggunakan perintah :
+
+cor.test(data_intro$Pendapatan,data_intro$Total)
+
+Berikut penjelasan function diatas :
+
+    Function cor.test digunakan untuk melihat hubungan secara statistik.
+    Pada korelasi test untuk mengujinya kita memakai t-test. Dengan hipotesis sebagai berikut:
+        Ho : tidak ada hubungan antara pendapatan dan total belanja.
+        Ha : terdapat hubungan antara pendapatan dan total belanja
+
+
+Hubungan Produk dengan Tingkat Kepuasan dengan chisq.test
+
+Berdasarkan kasus diatas kita akan melihat hubungan antara data kategorik dan kategorik, yaitu variabel jenis produk dan tingkat kepuasan. Sebelum menguji hubungannya, sebaiknya dilakukan tabulasi silang sebagai analisis deskriptif. Selanjutnya analisis inferensia yaitu menguji apakah ada hubungan maka dapat digunakan chi-square test.
+
+Untuk melakukan tabulasi dan uji statistik chi-square test pada R tahapannya sebagai berikut :
+
+table(data_intro$Produk,data_intro$Tingkat.Kepuasan)
+chisq.test(table(data_intro$Produk,data_intro$Tingkat.Kepuasan))
+
+Perintah table untuk melihat tabulasi antar variabel kategorik, sedangkan perintah chisq.test digunakan untuk melihat hubungan secara statistik.
+
+Dengan hipotesis sebagai berikut :
+
+    Ho : tidak ada hubungan antara jenis produk dan tingkat kepuasan.
+    Ha : terdapat hubungan antara jenis produk dan tingkat kepuasan  
+
+
+Hubungan Produk dengan Tingkat Kepuasan dengan chisq.test
+
+Berdasarkan kasus diatas kita akan melihat hubungan antara data kategorik dan kategorik, yaitu variabel jenis produk dan tingkat kepuasan. Sebelum menguji hubungannya, sebaiknya dilakukan tabulasi silang sebagai analisis deskriptif. Selanjutnya analisis inferensia yaitu menguji apakah ada hubungan maka dapat digunakan chi-square test.
+
+Untuk melakukan tabulasi dan uji statistik chi-square test pada R tahapannya sebagai berikut :
+
+table(data_intro$Produk,data_intro$Tingkat.Kepuasan)
+chisq.test(table(data_intro$Produk,data_intro$Tingkat.Kepuasan))
+
+Perintah table untuk melihat tabulasi antar variabel kategorik, sedangkan perintah chisq.test digunakan untuk melihat hubungan secara statistik.
+
+Dengan hipotesis sebagai berikut :
+
+    Ho : tidak ada hubungan antara jenis produk dan tingkat kepuasan.
+    Ha : terdapat hubungan antara jenis produk dan tingkat kepuasan  
+
+
+
+Hubungan Jenis Kelamin dengan Total Belanja dengan t.test
+
+Berdasarkan kasus diatas kita akan melihat hubungan antara data kategorik dan numerik, yaitu variabel jenis kelamin dan total belanja. Sebelum menguji hubungannya, sebaiknya dilihat perbedaan rata-rata total belanja untuk laki-laki dan perempuan dengan visualisasi yaitu menggunakan boxplot. Boxplot grafik statistik dari data dengan komponen lima ukuran statistik yaitu Min, Q1,Q2, Q3, dan Max. Untuk lebih jelasnya mengenai boxplot dapat dilihat gambar dibawah ini
+
+Selanjutnya analisis inferensia yaitu untuk mengetahui apakah ada perbedaan rata-rata total belanja pada laki-laki dan perempuan maka digunakan statistik uji t-test.
+
+Untuk melakukan visualisasi boxplot dan uji statistik t-test pada R tahapannya sebagai berikut :
+
+boxplot(Total~Jenis.Kelamin,data = data_intro)
+t.test(Total~Jenis.Kelamin,data = data_intro)
+
+Function boxplot digunakan untuk melihat secara grafik rata-rata total belanja pada laki-laki dan perempuan, sedangkan perintah t.test digunakan untuk melihat hubungan secara statistik. Penggunaan kedua fungsi diatas yaitu variabel pertama yang bertipe numerik, sedangkan variabel kedua variabel kategorik. Hipotesis t-test sebagai berikut :
+
+    Hipotesis Nihil (null): tidak ada perbedaan rata-rata total belanja antara laki-laki dan perempuan
+    Hipotesis Alternatif : ada perbedaan rata-rata total belanja antara laki-laki dan perempuan
+
+contoh coding:
+## carilah boxplot antara variabel jenis kelamin dengan total belanja
+boxplot(Total~Jenis.Kelamin,data = data_intro)
+
+## analisis bagaimana hubungan jenis kelamin dengan total belanja mengunakan uji statistik t-test
+t.test(Total~Jenis.Kelamin,data = data_intro)
+
+
+
+PYTHON FUNDAMENTAL :
+
+Printing Data Type 
+coding :
+#tipe data Boolean
+print(True)
+
+#tipe data String
+var_string="Belajar Python DQLAB"
+print(var_string)
+print(type(var_string))
+#tipe data Integer
+var_int=10
+print(var_int)
+print(type(var_int))
+#tipe data Float
+var_float=3.14
+print(var_float)
+print(type(var_float))
+#tipe data List
+var_list=[1,2,3,4]
+print(var_list)
+print(type(var_list))
+#tipe data Tuple
+var_tuple=("satu","dua","tiga")
+print(var_tuple)
+print(type(var_tuple))
+#tipe data Dictionary
+var_dict={"nama":"Ali", 'umur':20}
+print(var_dict)
+print(type(var_dict))
+
+
+IF Statement :
+Penggunaan IF sebenarnya adalah sebuah statement untuk menentukan keputusan mana yang akan diambil berdasarkan suatu kondisi yang ditentukan oleh pembuat program.
+
+Cobalah ketikkan kode seperti di bawah ini :
+
+i = 10 #inisialisasi variable i yang memiliki nilai 10
+
+if(i==10): #pengecekan nilai i apakah sama dengan 10
+    print("ini adalah angka 10") #jika TRUE maka akan mencetak kalimat ini
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+ini adalah angka 10
+
+ 
+
+Dengan mengunakan code yang sama, ubahlah nilai variable i menjadi 7.
+
+i = 7 #inisialisasi variable i yang memiliki nilai 10
+
+if(i==10): #pengecekan nilai i apakah sama dengan 10
+    print("ini adalah angka 10") #jika TRUE maka akan mencetak kalimat ini
+
+Kliklah tombol , maka kamu akan temukan tidak ada hasil yang ditampilkan. Hal ini disebabkan oleh nilai i=7 yang diinisialisasi tidak memenuhi syarat kondisi pada IF yang telah dibuat. 
+
+
+IF ELSE ELIF :
+
+Cobalah ketikkan kode seperti di bawah ini: 
+
+i=5
+
+if(i==5):
+     print("ini adalah angka 5")
+elif(i>5):
+     print("lebih besar dari 5")
+else:
+     print("lebih kecil dari 5")
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+ini adalah angka 5
+
+ 
+
+Coba modifikasi kode sebelumnya dengan mengubah nilai variable i menjadi 7 seperti contoh dibawah ini:
+
+i=7
+
+if(i==5):
+     print("ini adalah angka 5")
+elif(i>5):
+     print("lebih besar dari 5")
+else:
+     print("lebih kecil dari 5")
+
+ 
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+lebih besar dari 5
+
+Penjelasan:
+
+Untuk i=7, nilai variable i tidak memenuhi syarat dari kondisi pertama yaitu apakah i = 5? Selanjutnya, nilai variabel i dicek pada kondisi kedua, apakah i > 5? Kondisi kedua ini memenuhi bahwa i > 5, sehingga dicetaklah pernyataan "lebih besar dari 5".
+
+ 
+
+Ubah kembali nilai variable i menjadi 3.
+
+i=3
+
+if(i==5):
+     print("ini adalah angka 5")
+elif(i>5):
+     print("lebih besar dari 5")
+else:
+     print("lebih kecil dari 5")
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+lebih kecil dari 5
+
+Penjelasan:
+
+Untuk i=3, nilai variable i tidak memenuhi syarat dari kondisi pertama yaitu apakah i = 5? Selanjutnya, nilai variabel i dicek pada kondisi kedua, apakah i > 5? Kondisi kedua ini masih tidak memenuhi bahwa i > 5. Dengan demikian kondisi ketiga sebagai piliha terakhir yang akan dicetak yaitu pernyataan "lebih kecil dari 5".
+
+
+NESTED IF :
+Fungsi IF sendiri dapat digunakan secara bertingkat atau dapat memiliki pengecekan lebih dari 1 kondisi, sebagai contoh:
+
+if ( i<7 && i <3)
+
+Pernyataan ini berarti bahwa i harus bernilai kurang dari 7 dan juga harus kurang dari 3 agar bisa memenuhi pengecekan tersebut.
+
+ 
+Tugas:
+
+Ketiklah potongan code di bawah ini pada live code editor untuk melakukan pengecekan bertingkat
+
+       
+
+Pengecekan bertingkat ini kerap disebut sebagai nested IF.
+
+
+PRAKTIK OPERASI MATEMATIKA :
+Pada praktik ini kita akan mencoba seluruh operator matematika.
+
+Fokus pada sesi ini dititikberatkan pada penggunaan operator matematika menggunakan dua variabel yang telah diinisialisasi masing-masingnya dengan bilangan bulat tertentu.
+
+ 
+
+Ketikan code di bawah ini pada editor:
+
+a=10
+b=5
+selisih = a-b
+jumlah = a+b
+kali = a*b
+bagi = a/b
+print("Hasil penjumlahan a dan b adalah", jumlah)
+print("Selisih a dan b adalah :",selisih)
+print("Hasil perkalian a dan b adalah :",kali)
+print("Hasil pembagian a dan b adalah:",bagi)
+
+
+Operasi modulus
+
+Modulus cukup jarang dipakai, akan tetapi untuk beberapa kasus modulus sangat berguna terutama dalam mempercepat proses perhitungan. Modulus merupakan fungsi yang akan menghitung sisa dari hasil pembagian.
+
+ 
+
+Untuk lebih jelasnya silahkan lakukan praktik di bawah ini:
+
+c=10
+d=5
+
+modulus=c%d
+print("Hasil modulus",modulus)
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+Hasil modulus 0
+
+Coba ubah nilai d dari 5 menjadi 3. Lalu RUN lagi code tersebut. Maka pasti akan keluar hasil:
+
+Hasil modulus 1
+
+Kenapa bisa seperti itu? Prinsip modulus adalah dasarnya sebuah pembagian. Jika pembagi tidak bisa membagi habis angka yang dibagi maka akan dibagi hingga mendekati nilai terkecil yang tidak mampu dibagi lagi. Selisih antara angka yang mendekati dan angka yang dibagi nanti merupakan hasil modulus. Jika habis dibagi seperti kasus pertama 10/5 maka modulus akan mengembalikan nilai 0.
+
+
+looping 
+while
+
+Struktur while pada python tidak berbeda jauh dengan bahasa pemrograman lainnya. Lebih sederhananya, struktur penulisan python membuat dia mudah untuk dibaca.
+
+Ketikan kode di bawah ini :
+
+j = 0 #nilai awal j =0
+
+while j<6: #ketika j kurang dari 6 lakukan perulangan, jika tidak stop perulangan
+    print("Ini adalah perulangan ke -",j) #lakukan perintah ini ketika perulangan
+    j=j+1 #setiap kali diakhir perulangan update nilai dengan ditambah 1.
+
+Klik tombol  maka akan keluar hasil seperti ini:
+
+Ini adalah perulangan ke - 0
+Ini adalah perulangan ke - 1
+Ini adalah perulangan ke - 2
+Ini adalah perulangan ke - 3
+Ini adalah perulangan ke - 4
+Ini adalah perulangan ke – 5
+
+for (1)
+
+Struktur looping for pada python berbeda dengan struktur for pada umumnya. Pastikan untuk memperhatikan hal ini dengan baik.
+
+Coba ketik kode di bawah ini :
+
+for i in range (1,6): #perulangan for sebagai inisialisasi dari angka 1 hingga angka yang lebih kecil daripada 6.
+
+    print("Ini adalah perulangan ke -", i) #perintah jika looping akan tetap berjalan
+
+Penjelasan sebelum klik tombol RUN :
+
+Maksud dari fungsi for i in range (1,6) adalah, jika kita konversi pada JAVA atau C sama dengan for(i=1;i<6i++). Jika dikonversi menjadi kalimat maka akan menjadi “perulangan dimulai dari nilai i = 1 hingga nilai i kurang dari 6 dimana setiap kali perulangan nilai i akan selalu ditambah 1”. Jika nilai i sudah mencapai 6 perulangan akan dihentikan.
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+Ini adalah perulangan ke - 1
+Ini adalah perulangan ke - 2
+Ini adalah perulangan ke - 3
+Ini adalah perulangan ke - 4
+Ini adalah perulangan ke – 5​
+
+for (2) with access element
+
+Keunikan lain dari looping dengan python adalah selain bahasa yang mudah dimengerti, kita juga bisa mengakses elemen yang terdapat pada sebuah list. Berikut ini contohnya :
+
+count=[1,2,3,4,5] #elemen list
+
+for number in count: #looping untuk menampilkan semua elemen pada count
+    print("Ini adalah element count : ", number) #menampilkan elemen list pada count
+
+Klik tombol maka akan keluar hasil seperti ini: 
+
+Ini adalah element count :  1
+Ini adalah element count :  2
+Ini adalah element count :  3
+Ini adalah element count :  4
+Ini adalah element count :  5
+
+ 
+Tugas Praktek
+
+    Buatlah sebuah program yang bisa mengeluarkan angka 1 sampai 10.
+    Tampilan akan menunjukan "Angka ganjil 1" untuk angka ganjil dan "Angka genap 2" untuk angka genap. (Menggunakan looping for)
+coding :
+for i in range (1,10):
+    if(i%2==0):
+        print("Angka genap",i)
+    else:
+         print("Angka ganjil",i)
+Note: Kode dasar sudah disertakan, Anda cukup mengganti tanda # dengan nilai-nilai yang sesuai.
+
+
+Membuat fungsi sendiri
+
+Fungsi pada Python, dibuat dengan kata kunci def  kemudian diikuti dengan nama fungsinya.
+
+Contoh :
+
+def nama_fungsi():
+    print ("Hello ini Fungsi")
+
+ 
+
+Sama seperti blok kode yang lain, kita juga harus memberikan indentasi (tab atau spasi 2x) untuk menuliskan isi fungsi.
+
+ 
+
+Cara untuk memanggil fungsinya cukup sederhana. Cukup seperti ini:
+
+nama_fungsi()
+
+ 
+
+Sebagai contoh full code-nya, kamu bisa coba ketikkan kode di bawah ini :
+
+# Membuat Fungsi
+def salam():
+    print("Hello, Selamat Pagi")
+
+
+
+## Pemanggilan Fungsi
+salam()
+
+
+Parameter pada fungsi
+
+Sekarang, bagaimana kalau kita ingin memberikan input nilai ke dalam fungsi? Kita bisa menggunakan parameter. Parameter adalah variabel yang menampung nilai untuk diproses kedalam suatu fungsi.
+
+ 
+
+Untuk mempermudah pembelajaran, pada contoh kali ini telah disediakan rumusan matematika untuk menghitung luas pada segitiga. Berikut adalah contoh kodenya:
+
+def luas_segitiga(alas, tinggi): #alas dan tinggi merupakan parameter yang masuk
+    luas = (alas * tinggi) / 2
+    print("Luas segitiga: %f" % luas);
+
+
+
+# Pemanggilan fungsi
+##4 dan 6 merupakan parameter yang diinputkan kedalam fungsi luas segitiga
+luas_segitiga(4, 6) 
+
+ 
+ Fungsi dengan Return Value
+
+Fungsi yang tidak mengembalikan nilai biasanya disebut dengan prosedur. Namun, kadang kita butuh hasil proses dari fungsi untuk digunakan pada proses berikutnya. Maka fungsi harus mengembalikan nilai dari hasil pemrosesannya. Cara mengembalikan nilai adalah menggunakan kata kunci return lalu diikuti dengan nilai atau variabel yang akan dikembalikan.
+
+Meneruskan kembali di poin sebelumnya dengan fungsi luas segitiga yang sudah dicontohkan, mari tambahkan return value sehingga menjadi seperti ini:
+
+def luas_segitiga(alas, tinggi): #alas dan tinggi merupakan parameter yang masuk
+    luas = (alas * tinggi) / 2
+    return luas
+
+
+# Pemanggilan fungsi
+##4 dan 6 merupakan parameter yang diinputkan kedalam fungsi luas segitiga 
+print("Luas segitiga: %d" % luas_segitiga(4, 6))​
+
+modul
+
+Pada sesi praktik ini, kita akan menggunakan modul math yang merupakan module standar untuk berbagai fungsi matematika. Panggil terlebih dahulu modul ini seperti yang ditunjukkan berikut ini:
+
+import math
+
+Terlihat bahwa cara menggunakan modul cukup sederhana.
+
+Secara umum, module memiliki banyak fungsi. Cara pemrogram untuk mengakses fungsi-fungsi yang tersedia pada suatu modul juga berbeda-beda. Untuk saat ini, perhatikan kode berikut dan kemudian ketikkan kode di bawah ini di Code Editor:
+
+import math
+print("Nilai pi adalah:", math.pi)  # math.pi merupakan sintak untuk memanggil fungsi pi
+
+ 
+
+Klik Run untuk melihat hasilnya. Bila sudah paham kegunaanya, klik Submit untuk melanjutkan ke bagian berikutnya.
+
+
+Import dengan Module Rename atau Alias
+
+Kita bisa mengimpor modul dengan mengganti namanya. Hal ini biasa dilakukan untuk menyingkat nama modul yang panjang.
+
+import math as m                #menggunakan m sebagai module rename atau alias
+print("Nilai pi adalah:", m.pi) #m.pi merupakan sintak untuk memanggil fungsi​
+
+Klik Run untuk melihat hasilnya. Bila sudah paham kegunaanya, klik Submit untuk melanjutkan ke course selanjutnya.
+
+
+Import Sebagian Fungsi
+
+Sebuah module dapat memiliki puluhan atau ratusan fungsi. Terkadang kasus tertentu ketika memprogram, kita hanya membutuhkan satu, dua, atau beberapa buah fungsi saja. Untuk meminimalisir ketidakefisienan suatu program dalam me-load suatu module seperti yang telah dilakukan dalam format import module_name. Selanjutnya, kita dapat mengimport beberapa modul yang dibutuhkan saja menggunakan format from module_name import function_name
+
+from math import pi
+
+print("Nilai pi adalah", pi)
+
+Klik Run untuk melihat hasilnya. Bila sudah paham kegunaanya, klik Submit untuk melanjutkan ke bagian selanjutnya.
+
+
+Import Semua isi Moduls
+
+Namun, jika memang yang dibutuhkan banyak, semisal lebih dari 10 atau bahkan ratusan fungsi, bisa dilakukan import semuanya dengan menggunakan format from module_name import *. Tanda * disini menunjukan semua fungsi diimport ke dalam code.
+
+from math import *
+
+print("Nilai e adalah:", e)
+
+Klik Run untuk melihat hasilnya. Bila sudah paham kegunaanya, klik Submit untuk melanjutkan ke course selanjutnya.
+
+
+Pendahuluan
+
+CSV atau comma separated value adalah salah satu tipe file yang digunakan secara luas di dunia programming. Tidak hanya itu CSV pun sering digunakan dalam pengolahan informasi yang dihasilkan spreadsheet untuk diproses lebih lanjut melalui mesin analitik. CSV pun dianggap sebagai file yang agnostik karena dapat digunakan oleh berbagai database untuk proses backup data. CSV dianggap sebagai salah satu tipe data yang sering dipakai untuk mengelola data pada proses lanjutan.
+
+
+Membaca Teks File (CSV)
+Info: materi telah diperbarui pada tanggal 31 Agustus 2021, pastikan kembali kode yang telah ditulis disesuaikan dengan bagian Lesson.
+
+Sekarang kita akan mencoba membaca sebuah file CSV yang telah dihasilkan aplikasi atau program lain. Di Python, hasil pembacaan setiap baris pada file CSV akan dikonversi menjadi list Python.
+
+Berikut adalah contoh kode untuk membaca file CSV dengan kasus yang sangat sederhana, coba ketik kode di bawah ini pada Code Editor:
+
+import requests
+from contextlib import closing
+import csv
+
+# tentukan lokasi file, nama file, dan inisialisasi csv
+url = 'https://storage.googleapis.com/dqlab-dataset/penduduk_gender_head.csv'
+
+# baca file csv secara streaming 
+with closing(requests.get(url, stream=True)) as r:
+    f = (line.decode('utf-8') for line in r.iter_lines())
+
+    reader = csv.reader(f, delimiter=',')
+
+    # membaca baris per baris
+    for row in reader:
+        print(row)
+
+Jika kamu ingin membaca file csv yang tersimpan di direktori yang sama dengan direktori program python kamu, maka kode berikut dapat kamu gunakan (misalnya di local computer kamu): 
+
+import csv
+
+# tentukan lokasi file, nama file, dan inisialisasi csv
+f = open('https://storage.googleapis.com/dqlab-dataset/penduduk_gender_head.csv', 'r')
+reader = csv.reader(f)
+
+# membaca baris per baris
+for row in reader:
+     print (row)
+
+# menutup file csv
+f.close()
+
+ 
+
+Klik Run untuk melihat hasilnya. Bila sudah paham kegunaanya, klik Submit untuk melanjutkan ke course selanjutnya.
+
+
+Membaca file CSV dengan menggunakan PANDAS
+
+Bagi yang belum familiar, PANDAS merupakan salah satu library yang sangat sering digunakan untuk aplikasi dan implementasi data science baik untuk data manipulation, data pre-processing, atau data wrangling. Pada sesi kali ini, kita akan menggunakan PANDAS untuk membaca file dari csv.
+
+Cobalah ketik kode di bawah ini:
+
+import pandas as pd
+pd.set_option("display.max_columns",50)
+
+table = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/penduduk_gender_head.csv")
+table.head()
+print(table)
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+
+Bar Chart
+
+Sebelum masuk pada membuat grafik bar, kita akan membahas library yang akan gunakan. Python punya banyak library untuk visualisasi. Salah satu yang paling sering digunakan adalah matplotlib karena memang sudah ada sejak lama dan relatif stabil dalam perkembangannya. Maka dari itu, matplotlib dipilih untuk belajar visualisasi pada sesi kali ini.
+
+Matplotlib sendiri menyediakan banyak jenis grafik mulai dari scatter/plot, line, bar, dan lain-lain. Pada praktik ini, akan ada tambahan library selain dengan menggunakan matplotlib dan pandas, yaitu menggunakan numpy. Numpy sendiri pada praktek kali ini digunakan untuk melakukan manipulasi data dari csv untuk memudahkan visualisasi.
+
+Ketikan kode di bawah ini :
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+table = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/penduduk_gender_head.csv")
+table.head()
+x_label = table['NAMA KELURAHAN']
+plt.bar(x=np.arange(len(x_label)),height=table['LAKI-LAKI WNI'])
+plt.show()
+
+Klik tombol maka akan keluar hasil seperti ini:
+
+Parameter dalam Grafik (Memberikan Nilai Axis dari data CSV)
+
+Jika ditelisik lebih dalam pada CSV, dari sana ada nama kelurahan yang merupakan variabel atau seharusnya menjadi nilai AXIS pada grafik ini. Di praktek kali ini, kita akan mencoba bagaimana menempatkan nama kelurahan pada grafik.
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+table = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/penduduk_gender_head.csv")
+table.head()
+
+x_label = table['NAMA KELURAHAN']
+plt.bar(x=np.arange(len(x_label)),height=table['LAKI-LAKI WNI'])
+plt.xticks(np.arange(len(x_label)), table['NAMA KELURAHAN'], rotation=30)
+plt.show()
+
+Bila dijalankan akan keluar seperti di bawah ini:
+
+
+Menambah Title dan Label pada Grafik
+
+Pada implementasi grafik, pemberian label pada AXIS dan Ordinat sangat penting untuk menjelaskan maksud grafik. Pada praktik kali ini, kita akan mencoba memberikan label dan title pada grafik yang telah dibuat sebelumnya.
+
+Cobalah ketik kode di bawah ini :
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+table = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/penduduk_gender_head.csv")
+table.head()
+
+x_label = table['NAMA KELURAHAN']
+plt.bar(x=np.arange(len(x_label)),height=table['LAKI-LAKI WNI'])
+plt.xticks(np.arange(len(x_label)), table['NAMA KELURAHAN'], rotation=90)
+plt.xlabel('Kelurahan di Jakarta Pusat')
+plt.ylabel('Jumlah Penduduk Laki - Laki')
+plt.title('Persebaran Jumlah Penduduk Laki- Laki di Jakarta Pusat')
+
+plt.show()
+
+
+Membaca file dengan menggunakan pandas
+
+Sebagai salah satu library untuk melakukan proses awal dari analisis data, pandas juga memiliki kemampuan untuk membaca berbagai macam jenis file. Format yang bisa dibaca oleh pandas ada berbagai macam, antara lain .txt, .csv, .tsv, dan lainnya. Pandas tidak hanya bisa membaca file saja, namun juga bisa merubah data dari file menjadi bentuk dataframe yang akhirnya nanti bisa diakses, diagregasi dan diolah. Coba praktikan kode di bawah ini :
+
+
+DATA WRINGLING PYTHON 
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data)
+
+
+Membaca file dengan menggunakan head()
+
+Pada suatu kasus, data yang kita baca cukup banyak atau loading yang lama. Untuk memastikan data kita terbaca dengan baik dan bisa menampilkan data sebagian untuk ditampilkan secara benar, kita bisa memakai fungsi head(). Bisa dituliskan kode di bawah ini untuk prakteknya:
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.head())
+
+Melakukan akses data kolom
+
+Dalam suatu analisis data ada kalanya kita hanya butuh melakukan akses beberapa data saja dan tidak perlu harus menampilkan semua data. Pada pandas kita bisa melakukan akses dalam berbagai kebutuhan. Mulai dari hanya akses kolom tertentu ataupun baris tertentu. Pada sesi kali ini kita akan mencoba untuk melakukan akses beberapa kolom tertentu pada suatu dataset.
+
+Pertama yang harus dilakukan untuk melakukan akses kolom adalah mengetahui nama-nama kolom yang ada. Coba ketikkan kode di bawah ini untuk melihat nama kolom yang ada.
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.columns)
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+Index(['CustomerID', 'Genre', 'Age', 'Annual Income (k$)',
+       'Spending Score (1-100)'],
+      dtype='object')
+
+Note : Pada dataset ini ada 5 kolom termasuk class, dimana 4 kolom  merupakan data numerik dan 1 kolom merupakan data string. Pada praktek selanjutnya kita akan mencoba mengakses data age. Untuk melakukannya coba tuliskan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data['Age'])
+
+Melakukan akses data melalui baris
+
+Selain melakukan akses data melalui kolom, dengan menggunakan pandas juga bisa melakukan akses dengan menggunakan baris. Berbeda dengan akses melalui kolom, fungsi untuk menampilkan data dari suatu baris adalah fungsi .iloc[i] dimana [i] menunjukan urutan baris yang akan ditampilkan yang dimana indexnya diawali dari 0. Coba ketikan code di bawah ini untuk mempermudah :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.iloc[5])
+
+Menampilkan suatu data dari baris dan kolom tertentu
+
+Tidak hanya dengan menentukan dari kolom dan baris, dengan menggunakan pandas kita juga bisa memanggil suatu data dari suatu baris dan kolom tertentu dalam satu waktu. Perhatikan dan coba kode di bawah ini:
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data['Age'].iloc[1])
+
+print("Cuplikan Dataset:")
+
+print(csv_data.head())
+
+
+Menampilkan data dalam range tertentu
+
+Setelah menampilkan suatu kelompok data, bagaimana jika ingin menampilkan data dari baris ke 5 sampai ke 20 dari suatu dataset? Untuk mengantisipasi hal tersebut, pandas juga bisa menampilkan data dalam range tertentu, baik range untuk baris saja, kolom saja, dan range untuk baris dan kolom.
+
+Akses range pada suatu kolom dan baris tertentu, untuk mencobanya silahkan ketikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print("Menampilkan data ke 5 sampai kurang dari 10 :")
+
+print(csv_data['Age'].iloc[5:10])
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+Menampilkan data ke 5 sampai kurang dari 10 :
+5    22
+6    35
+7    23
+8    64
+9    30
+Name: Age, dtype: int64
+
+ 
+
+Menampilkan suatu range data tertentu pada suatu baris saja. Cobalah ketikan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print("Menampilkan data ke 5 sampai kurang dari 10 dalam satu baris:")
+
+print(csv_data.iloc[5:10])
+
+Menampilkan informasi statistik dengan Numpy
+
+Mengetahui informasi statistik pada suatu data sangat penting. Mulai dari distribusi data, nilai max atau min, hingga standar deviasi dari suatu dataset. Jika datanya berjumlah dibawah 10 mungkin masih dikerjakan secara manual. Namun, bayangkan jika datanya sudah mencapai ratusan bahkan ribuan. Tidak mungkin pastinya untuk dilakukan secara manual. Maka dari itu pentingnya fungsi describe() pada pandas. Fungsi describe() ini memungkinkan untuk mengetahui informasi statistik dari suatu dataset secara cepat. Coba untuk ketikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.describe(include='all'))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID   Genre         Age  Annual Income (k$)  \
+count   200.000000     200  200.000000          200.000000
+unique         NaN       2         NaN                 NaN
+top            NaN  Female         NaN                 NaN
+freq           NaN     112         NaN                 NaN
+mean    100.500000     NaN   38.850000           60.560000
+std      57.879185     NaN   13.969007           26.264721
+min       1.000000     NaN   18.000000           15.000000
+25%      50.750000     NaN   28.750000           41.500000
+50%     100.500000     NaN   36.000000           61.500000
+75%     150.250000     NaN   49.000000           78.000000
+max     200.000000     NaN   70.000000          137.000000
+
+        Spending Score (1-100)
+count               200.000000
+unique                     NaN
+top                        NaN
+freq                       NaN
+mean                 50.200000
+std                  25.823522
+min                   1.000000
+25%                  34.750000
+50%                  50.000000
+75%                  73.000000
+max                  99.000000
+
+Note : Banyak nilai NaN yang tampil. Hal itu karena pada dataset ada format data string yang akhirnya memunculkan format NaN.
+
+Untuk meminimalisir hal tersebut dan memfilter hanya data numerical saja, digunakan  exclude=[‘O’], dimana fungsi itu akan mengabaikan data yang non-numerical untuk diproses. Coba implementasikan code di bawah ini:
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.describe(exclude=['O']))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID         Age  Annual Income (k$)  Spending Score (1-100)
+count  200.000000  200.000000          200.000000              200.000000
+mean   100.500000   38.850000           60.560000               50.200000
+std     57.879185   13.969007           26.264721               25.823522
+min      1.000000   18.000000           15.000000                1.000000
+25%     50.750000   28.750000           41.500000               34.750000
+50%    100.500000   36.000000           61.500000               50.000000
+75%    150.250000   49.000000           78.000000               73.000000
+max    200.000000   70.000000          137.000000               99.000000
+
+
+
+Menampilkan informasi statistik dengan Numpy
+
+Mengetahui informasi statistik pada suatu data sangat penting. Mulai dari distribusi data, nilai max atau min, hingga standar deviasi dari suatu dataset. Jika datanya berjumlah dibawah 10 mungkin masih dikerjakan secara manual. Namun, bayangkan jika datanya sudah mencapai ratusan bahkan ribuan. Tidak mungkin pastinya untuk dilakukan secara manual. Maka dari itu pentingnya fungsi describe() pada pandas. Fungsi describe() ini memungkinkan untuk mengetahui informasi statistik dari suatu dataset secara cepat. Coba untuk ketikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.describe(include='all'))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID   Genre         Age  Annual Income (k$)  \
+count   200.000000     200  200.000000          200.000000
+unique         NaN       2         NaN                 NaN
+top            NaN  Female         NaN                 NaN
+freq           NaN     112         NaN                 NaN
+mean    100.500000     NaN   38.850000           60.560000
+std      57.879185     NaN   13.969007           26.264721
+min       1.000000     NaN   18.000000           15.000000
+25%      50.750000     NaN   28.750000           41.500000
+50%     100.500000     NaN   36.000000           61.500000
+75%     150.250000     NaN   49.000000           78.000000
+max     200.000000     NaN   70.000000          137.000000
+
+        Spending Score (1-100)
+count               200.000000
+unique                     NaN
+top                        NaN
+freq                       NaN
+mean                 50.200000
+std                  25.823522
+min                   1.000000
+25%                  34.750000
+50%                  50.000000
+75%                  73.000000
+max                  99.000000
+
+Note : Banyak nilai NaN yang tampil. Hal itu karena pada dataset ada format data string yang akhirnya memunculkan format NaN.
+
+Untuk meminimalisir hal tersebut dan memfilter hanya data numerical saja, digunakan  exclude=[‘O’], dimana fungsi itu akan mengabaikan data yang non-numerical untuk diproses. Coba implementasikan code di bawah ini:
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.describe(exclude=['O']))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID         Age  Annual Income (k$)  Spending Score (1-100)
+count  200.000000  200.000000          200.000000              200.000000
+mean   100.500000   38.850000           60.560000               50.200000
+std     57.879185   13.969007           26.264721               25.823522
+min      1.000000   18.000000           15.000000                1.000000
+25%     50.750000   28.750000           41.500000               34.750000
+50%    100.500000   36.000000           61.500000               50.000000
+75%    150.250000   49.000000           78.000000               73.000000
+max    200.000000   70.000000          137.000000               99.000000
+
+
+
+
+
+Melakukan pengecekan untuk nilai NULL yang ada
+
+Dengan menggunakan fungsi pandas, kita tidak perlu melihat satu persatu baris data untuk mengetahui apakah ada nilai kosong atau NULL/NAN pada suatu dataset. Bayangkan jika kita memilki 1000 baris data. Apakah kita harus melihat semua baris data tersebut? Tentu saja tidak. Maka dari itu di pandas disediakan fungsi untuk mengecek apakah ada data yang kosong. Coba praktikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+
+print(csv_data.isnull().values.any())
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+False
+
+Note : data yang digunakan merupakan data yang lengkap, maka dari itu output yang dihasilkan False. Coba Sekarang ganti dengan dataset yang memang terdapat data yang kosong. Coba ketikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+
+print(csv_data.isnull().values.any())
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+True
+
+Lesson    
+ 5
+ 
+40
+
+1
+
+import pandas as pd
+
+2
+
+​
+
+3
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+
+4
+
+​
+
+5
+
+print(csv_data.isnull().values.any())
+
+Code Editor
+Console
+Graphic
+
+> 
+
+In [1]: import pandas as pd
+        
+        csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+        
+        print(csv_data.isnull().values.any())
+
+True 
+
+
+Mengisi dengan Mean
+
+Salah satu metode yang bisa dikatakan sebagai solusi yang umum pada kasus general data science adalah mengisi data kosong dengan menggunakan mean dari masing-masing kolom. Pertama kita harus menentukan mean dari masing-masing kolom. Pada pandas terdapat fungsi mean() untuk menentukan nilai mean dari masing-masing kolom. Mean sendiri digunakan untuk data yang memiliki sedikit sifat outlier/noisy/anomali dalam sebaran datanya maupun isinya.  Coba ketikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+
+print(csv_data.mean())
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID                100.500000
+Age                        38.939698
+Annual Income (k$)         61.005051
+Spending Score (1-100)     50.489899
+dtype: float64
+
+Fungsi mean sendiri berfungsi untuk menampilkan  nilai mean (rata-rata) dari setiap kolom. Nilai inilah nanti yang akan mengisi nilai kosong dari dataset yang mengalami kasus missing value. Untuk mengisi nilai yang kosong menggunakan fungsi fillna(), coba ketikkan kode di bawah ini :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+print(csv_data.mean())
+print("Dataset yang masih terdapat nilai kosong ! :")
+print(csv_data.head(10))
+
+csv_data=csv_data.fillna(csv_data.mean())
+print("Dataset yang sudah diproses Handling Missing Values dengan Mean :")
+print(csv_data.head(10))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID                100.500000
+Age                        38.939698
+Annual Income (k$)         61.005051
+Spending Score (1-100)     50.489899
+dtype: float64
+Dataset yang masih terdapat nilai kosong ! :
+   CustomerID   Genre   Age  Annual Income (k$)  Spending Score (1-100)
+0           1    Male  19.0                15.0                    39.0
+1           2    Male   NaN                15.0                    81.0
+2           3  Female  20.0                 NaN                     6.0
+3           4  Female  23.0                16.0                    77.0
+4           5  Female  31.0                17.0                     NaN
+5           6  Female  22.0                 NaN                    76.0
+6           7  Female  35.0                18.0                     6.0
+7           8  Female  23.0                18.0                    94.0
+8           9    Male  64.0                19.0                     NaN
+9          10  Female  30.0                19.0                    72.0
+Dataset yang sudah diproses Handling Missing Values dengan Mean :
+   CustomerID   Genre        Age  Annual Income (k$)  Spending Score (1-100)
+0           1    Male  19.000000           15.000000               39.000000
+1           2    Male  38.939698           15.000000               81.000000
+2           3  Female  20.000000           61.005051                6.000000
+3           4  Female  23.000000           16.000000               77.000000
+4           5  Female  31.000000           17.000000               50.489899
+5           6  Female  22.000000           61.005051               76.000000
+6           7  Female  35.000000           18.000000                6.000000
+7           8  Female  23.000000           18.000000               94.000000
+8           9    Male  64.000000           19.000000               50.489899
+9          10  Female  30.000000           19.000000               72.000000
+
+
+Mengisi dengan Median
+
+Berbeda dengan mean pada sesi sebelumnya, median digunakan untuk data-data yang memiliki sifat outlier yang kuat. Kenapa median dipilih? Median merupakan nilai tengah yang artinya bukan hasil dari perhitungan yang melibatkan data outlier. Pada beberapa kasus, data outlier dianggap mengganggu dan sering dianggap noisy karena bisa mempengaruhi distribusi kelas dan mengganggu analisa pada klasterisasi (clustering).
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+
+print(csv_data.median())
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+CustomerID                100.5
+Age                        36.0
+Annual Income (k$)         62.0
+Spending Score (1-100)     50.0
+dtype: float64
+
+Sama dengan sesi sebelumnya dengan mean(), gunakan kode di bawah ini untuk mengisi nilai yang kosong menggunakan fungsi fillna() :
+
+import pandas as pd
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data_missingvalue.csv")
+print("Dataset yang masih terdapat nilai kosong ! :")
+print(csv_data.head(10))
+
+csv_data=csv_data.fillna(csv_data.median())
+print("Dataset yang sudah diproses Handling Missing Values dengan Median :")
+print(csv_data.head(10))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+Dataset yang masih terdapat nilai kosong ! :
+   CustomerID   Genre   Age  Annual Income (k$)  Spending Score (1-100)
+0           1    Male  19.0                15.0                    39.0
+1           2    Male   NaN                15.0                    81.0
+2           3  Female  20.0                 NaN                     6.0
+3           4  Female  23.0                16.0                    77.0
+4           5  Female  31.0                17.0                     NaN
+5           6  Female  22.0                 NaN                    76.0
+6           7  Female  35.0                18.0                     6.0
+7           8  Female  23.0                18.0                    94.0
+8           9    Male  64.0                19.0                     NaN
+9          10  Female  30.0                19.0                    72.0
+Dataset yang sudah diproses Handling Missing Values dengan Median :
+   CustomerID   Genre   Age  Annual Income (k$)  Spending Score (1-100)
+0           1    Male  19.0                15.0                    39.0
+1           2    Male  36.0                15.0                    81.0
+2           3  Female  20.0                62.0                     6.0
+3           4  Female  23.0                16.0                    77.0
+4           5  Female  31.0                17.0                    50.0
+5           6  Female  22.0                62.0                    76.0
+6           7  Female  35.0                18.0                     6.0
+7           8  Female  23.0                18.0                    94.0
+8           9    Male  64.0                19.0                    50.0
+9          10  Female  30.0                19.0                    72.0
+
+
+Normalisasi Data
+
+Terkadang pada beberapa kasus, 1 kolom dengan kolom yang lain memiliki skala yang berbeda. Seperti cuplikan gambar di bawah ini :
+
+No
+	
+
+Usia
+	
+
+Masa Kerja (Tahun)
+	
+
+Gaji
+
+1
+	
+
+50
+	
+
+30
+	
+
+10000000
+
+2
+	
+
+30
+	
+
+10
+	
+
+5000000
+
+Antara Usia dan Masa Kerja masih memiliki range yang sama dalam skala puluhan. Namun, jika kolom Usia dan Masa Kerja dibandingkan dengan Gaji memiliki range nilai yang berbeda, dimana Usia dan Masa Kerja memiliki range puluhan dan Gaji mempunyai range nilai jutaan. Memang terlihat sederhana, namun hal ini bisa menjadi masalah besar dalam contoh kasus klasterisasi atau klasifikasi. Masuk pada kasus K-means yang sudah pernah dibahas sebelumnya. K-means merupakan algoritma klasterisasi (clustering) yang menggunakan perhitungan jarak dalam prosesnya. Sekarang coba bayangkan :
+
+Jika tidak ada normalisasi, maka jelas perhitungan kmeans diatas akan tergantung pada Gaji. Kenapa? Karena gaji berdomain jutaan dan 2 kolom lainnya hanya berdomain puluhan. Berapapun usia dan masa kerja seseorang tidak akan berpengaruh terhadap penilaian suatu perusahaan. Perbedaan skala pada setiap kolom ini merupakan hal yang sangat wajar dan sering terjadi dan inilah pentingnya normalisasi. Normalisasi sangat penting, terutama untuk yang menggunakan perhitungan jarak dengan menggunakan metode apapun.
+
+
+
+Metode Normalisasi
+
+Ada berbagai macam metode normalisasi, seperti MinMax, Zscore, Decimal Scaling, Sigmoid, dan Softmax. Pemakaiannya tergantung pada kebutuhan dari dataset dan jenis analisa yang dilakukan.
+MinMax
+
+Metode Min-Max merupakan metode yang cukup bisa dibayangkan karena termasuk metode normalisasi yang bersifat linier dengan data aslinya. Namun, metode ini bisa menyebabkan out of bound pada beberapa kasus.
+
+Kenapa bisa terjadi out of bound? Out of Bound terjadi apabila ada data baru masuk, dimana data tersebut melebihi nilai maksimal atau nilai minimal dari data yang sudah ada. Secara otomatis, perhitungan yang berlaku pada data yang sudah diperoleh tadi harus diulangi lagi semuanya dengan data baru yang masuk atau data baru yang mempunyai nilai maksimal/minimum yang melebihi tadi tidak bisa diproses. Karena kekurangan inilah MinMax tidak cocok untuk analisa real time / evolving system. Dimungkinkan dalam kasus-kasus terjadi kasus out of bound pada MinMax.
+
+MinMax sangat dianjurkan untuk kasus-kasus berbasis time frame analisis dan forecasting. Perhitungan dari metode ini cukup mengurangi data yang asli dengan nilai minimal dari fitur tersebut, kemudian hasil tersebut dikalikan dari hasil pengurangan nilai maximal yang baru dengan nilai minimal yang baru dan kemudian dibagi dengan nilai max dan min data di setiap fitur terakhir ditambah dengan nilai min yang baru.
+Z-Score
+
+Zscore adalah metode yang sering digunakan dalam berbagai penelitian berbasis data mining atau data science. Z-score merupakan metode normalisasi yang berdasarkan mean (nilai rata-rata) dan standard deviation (deviasi standar) dari data. Kenapa Z-Score sangat populer? Selain tidak banyak variabel yang diset dalam perhitungannya. Z-Score sangat dinamis dalam melakukan perhitungan normalisasi. Kelemahan dari Z-Score adalah prosesnya akan terulang lagi jika ada data baru yang masuk. Selain itu elemen yang dibutuhkan untuk perhitungan Z-Score juga membutuhkan proses yang cukup lama baik standar deviation ataupun rata-rata dari setiap kolom.
+
+Decimal Scaling
+
+Softmax
+
+Softmax merupakan metode normalisasi pengembangan transformasi secara linier. Output range-nya adalah 0-1. Metode ini sangat berguna pada saat data yang ada melibatkan data outlier.
+
+Sigmoid
+
+Sigmoidal merupakan metode normalization melakukan normalisasi data secara nonlinier ke dalam range -1 s/d 1 dengan menggunakan fungsi sigmoid. Metode ini sangat berguna pada saat data yang ada melibatkan data outlier. Data outlier adalah data yang keluar jauh dari jangkauan data lainnya
+
+
+
+Praktek Normalisasi menggunakan Scikit Learn pada Python
+
+Scikit Learn merupakan library pada python yang digunakan untuk machine learning dan data science. Salah satu library yang selalu menjadi favorit dan komunitasnya sangat kuat. Scikit-learn sendiri tidak hanya untuk analytics saja, namun juga untuk pre-processing, feature selection, dan proses analysis lainnya. Melanjutkan dari sesi normalisasi data, mari kita praktekan kode di bawah ini :
+
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+
+csv_data = pd.read_csv("https://storage.googleapis.com/dqlab-dataset/shopping_data.csv")
+array = csv_data.values
+
+X merupakan matriks yang berisi fitur dataset yang akan digunakan dalam machine learning, baik untuk regresi, klasifikasi, pengklusteran, atau normalisasi
+
+Pada kasus kita, X berisi fitur-fitur yang digunakan untuk dinormalisasi dengan teknik min-max scaler
+
+Ketik lanjutan dari kode di atas:
+
+X = array[:,2:5] #memisahkan fitur dari dataset. 
+Y = array[:,0:1]  #memisahkan class dari dataset
+
+dataset=pd.DataFrame({'Customer ID':array[:,0],'Gender':array[:,1],'Age':array[:,2],'Income':array[:,3],'Spending Score':array[:,4]})
+print("dataset sebelum dinormalisasi :")
+print(dataset.head(10))
+
+min_max_scaler = preprocessing.MinMaxScaler(feature_range=(0,1)) #inisialisasi normalisasi MinMax
+data = min_max_scaler.fit_transform(X) #transformasi MinMax untuk fitur
+dataset = pd.DataFrame({'Age':data[:,0],'Income':data[:,1],'Spending Score':data[:,2],'Customer ID':array[:,0],'Gender':array[:,1]})
+
+print("dataset setelah dinormalisasi :")
+print(dataset.head(10))
+
+Klik Tombol
+
+Hasil pada panel console akan keluar seperti berikut :
+
+dataset sebelum dinormalisasi :
+  Age Customer ID  Gender Income Spending Score
+0  19           1    Male     15             39
+1  21           2    Male     15             81
+2  20           3  Female     16              6
+3  23           4  Female     16             77
+4  31           5  Female     17             40
+5  22           6  Female     17             76
+6  35           7  Female     18              6
+7  23           8  Female     18             94
+8  64           9    Male     19              3
+9  30          10  Female     19             72
+dataset setelah dinormalisasi :
+        Age Customer ID  Gender    Income  Spending Score
+0  0.019231           1    Male  0.000000        0.387755
+1  0.057692           2    Male  0.000000        0.816327
+2  0.038462           3  Female  0.008197        0.051020
+3  0.096154           4  Female  0.008197        0.775510
+4  0.250000           5  Female  0.016393        0.397959
+5  0.076923           6  Female  0.016393        0.765306
+6  0.326923           7  Female  0.024590        0.051020
+7  0.096154           8  Female  0.024590        0.948980
+8  0.884615           9    Male  0.032787        0.020408
+9  0.230769          10  Female  0.032787        0.724490
+
+
+Produk-produk RDBMS di Pasaran
+
+Selain MySQL, masih ada produk lain RDBMS, baik yang berbayar (proprietary) maupun open source. Berikut adalah sebagian produk yang cukup populer di pasaran :
+
+    MySQL
+    Open-source SQL database yang cukup populer. Umumnya digunakan untuk pengembangan aplikasi web.
+
+    PostgreSQL
+    Open-source RDBMS product, dan juga umumnya digunakan untuk pengembangan aplikasi web. Akan tetapi secara kinerja, postgreSQL lebih lambat dibandingkan MySQL.
+
+    Oracle DB
+    Produk RDBMS yang dimiliki oleh Oracle Corporation dan produk ini bersifat proprietary atau tidak open source. Oracle DB umumnya digunakan di industri perbankan.
+
+    Microsoft SQL Server 
+    SQL Server adalah produk RDBMS yang dimiliki oleh Microsoft dan sama seperti Oracle DB, SQL Server bersifat proprietary atau tidak open source, SQL Server umumnya digunakan di perusahaan skala besar yang juga menggunakan produk keluaran Microsoft lainnya.
+
+    SQLite
+    Open source RDBMS, umumnya digunakan sebagai database di handphone, MP3 player, and perangkat lainnya.
+
+Selain itu, juga ada MariaDB yang juga gratis atau open source, IBM DB2, Microsoft Access, dan masih banyak lainnya.
+
+ 
+
+Umumnya RDBMS menggunakan SQL untuk mengakses database dan produk RDBMS tidak hanya satu macam saja tetapi ada berbagai macam produk, maka SQL syntax pun bisa jadi sedikit berbeda untuk setiap produk tersebut. Berikut contoh perbandingan MySQL, Oracle, dan SQLSERVER untuk menampilkan beberapa baris data dari suatu tabel :
+
+Struktur Penyimpanan RDBMS
+
+Sebagai penyimpan data, sistem database relasional memiliki struktur hirarki objek penyimpanan sebagai berikut:
+
+    Database
+    Tabel (table)
+    Kolom (column) atau Field
+
+Dari sini aku belajar informasi menarik yaitu setiap database bisa berisi beberapa tabel, dan setiap tabel bisa terdiri dari beberapa kolom. Di setiap database, tabel dan kolom memiliki nama sendiri sebagai identitas mereka. Tabel dan kolom inilah yang akan diisi data yang kemudian membentuk row (baris data). 
+
+ 
+
+ 
+
+Klik tombol Next untuk melanjutkan.
+
+Tabel dan Kolom
+
+Gambar berikut adalah contoh suatu Tabel dalam database. Karena setiap tabel dalam database memiliki nama, maka, nama tabel ini adalah ms_produk.
+
+Jika aku perhatikan, struktur tabel ms_produk terdiri dari empat kolom (column), masing-masing dengan nama berikut:
+
+    no_urut
+    kode_produk
+    nama_produk
+    harga
+
+Dan dalam tabel tersebut terdapat 10 baris data (row) dengan isi data yang bervariasi, contoh isi data untuk kolom "nama_produk" pada baris kelima adalah "Gift Voucher DQLab 250rb".
+
+
+Mengambil Seluruh Kolom dalam suatu Tabel
+
+“Jadi, bagaimana cara mengakses data dari database, Nja? Soalnya sejauh aku mencoba, aku sudah dapat hak akses tapi tidak paham cara membuka maupun mengakses tabel dan data dari database.”
+
+Aku akhirnya menyampaikan kendalaku pada Senja.
+
+“Untuk mengakses data di database, kita dapat menggunakan SELECT statement. Pada SELECT statement kita menyatakan kolom - kolom mana saja yang ingin kita tampilkan dari suatu tabel di database. SELECT statement tidak berdiri sendiri. Setelah menyatakan kolom - kolom yang ingin ditampilkan, kita melanjutkan dengan FROM. Di FROM inilah kita menyatakan dari tabel mana data yang ingin kita tampilkan berada. SELECT… FROM… adalah statement paling sederhana di SQL, dan merupakan bagian utama dari query. Kita tidak bisa meng-query data tanpa menggunakan statement ini,” jelas Senja.
+
+Senja juga menunjukkan padaku Query dasar dan sederhana perintah SELECT yang berfungsi untuk menampilkan seluruh kolom, sebagai berikut:
+
+ 
+
+ 
+
+    Kata awal, yaitu SELECT digunakan untuk menginformasikan kepada sistem bahwa kita ingin mengambil data. 
+    Tanda * (bintang) artinya seluruh kolom perlu diambil dari tabel yang dirujuk. Tanda ini sering juga disebut sebagai wildcard.
+    FROM [NAMA_TABLE], artinya table yang akan diambil datanya.
+    Tanda ; (titik koma) adalah tanda yang menyatakan akhir dari perintah SELECT atau SQL lain.
+
+ 
+
+Senja mengajak aku untuk langsung mempraktekkan perintah SQL SELECT untuk menampilkan data pada tabel yang bernama ms_produk. 
+
+Jika aku menjalankan tombol RUN, maka aku akan mendapatkan tabel seperti berikut: 
+
+ 
+Mengambil Satu Kolom dari Tabel
+
+Aku sudah cukup paham dengan penjelasan Senja tadi. Tapi, masih ada satu yang mengganjal. “Bagaimana kalau aku hanya ingin menampilkan satu kolom saja dari suatu tabel/data, Nja?”
+
+“Secara umum penggunaan perintah SELECT untuk mengambil satu kolom dinyatakan oleh sintaks berikut ini,” ujar Senja sambil menggeser layar laptopnya agar bisa kuperhatikan:
+
+“Kita coba ya dengan menampilkan data pelanggan yang ada di database. Kita sudah menggunakan perintah SELECT sebelumnya untuk mengambil seluruh kolom. Nah, berikut adalah contoh query untuk mengambil satu kolom saja yaitu nama_produk,” tambah Senja.
+
+Aku mencatat beberapa tampilan penting yang menjadi contoh dari Senja buatku.
+
+ 
+
+Ketikkan perintah berikut pada code editor dan kemudian klik tombol Run,
+
+ 
+
+Hasilnya, sistem database akan menampilkan data nama_produk saja dari tabel ms_produk seperti terlihat sebagai berikut.
+
+Terlihat ada sepuluh nama peralatan kantor yang ditampilkan, dan jumlah ini sesuai dengan jumlah seluruh row yang terdapat pada tabel ms_produk.
+
+
+Membatasi Pengambilan Jumlah Row Data
+
+Selain pembatasan kolom, aku bisa membatasi jumlah baris data yang diambil. Seperti yang aku pelajari di materi RDMS sebelumnya, bahwa untuk tiap produk RDBMS, caranya agak berbeda-beda. Untuk MySQL dan PostgreSQL, aku dapat menggunakan LIMIT. Secara umum syntaxnya dinyatakan sebagai berikut
+
+Sebagai contoh, aku bisa menggunakan perintah LIMIT untuk membatasi pengambilan data dari tabel ms_produk sebanyak tiga baris data (row).
+
+Jika berjalan dengan lancar, akan terlihat hasil tiga data pertama yang ditampilkan seperti berikut.
+
+Terlihat hanya tiga baris data pertama yang ditampilkan dari keseluruhan sepuluh baris data yang ada.
+
+ 
+Tugas:
+
+Ambillah lima data teratas dari kolom nama_produk dan harga.
+
+Jika perintah yang diketikkan berjalan dengan benar, maka Live Code Editor Console akan menampilkan hasil seperti berikut.
+
+
+Penggunaan SELECT DISTINCT statement
+
+Aku diminta mengambil data dari tabel ms_pelanggan oleh Senja. Menggunakan perintah yang telah dipelajari, aku menuliskan Syntax pada Live Code Editor: 
+
+Ternyata, dari data pelanggan, aku menemukan duplikasi data, dalam nama_customer dan alamat untuk no_urut 3 & 11, serta 5 & 12 yang sama persis dengan kode_pelanggan yang berbeda. Tentunya ini akan berdampak pada hasil analisaku nantinya. 
+
+ 
+
+Untuk menghilangkan data duplikasi, aku bisa menggunakan SELECT DISTINCT statement. Dengan SELECT DISTINCT, data yang sama atau duplikat akan dieliminasi dan akan ditampilkan data yang unik saja.
+
+Berikut syntax-nya:
+
+Aku langsung mempraktikkan syntax SELECT DISTINCT untuk mengambil data pelanggan dan menghilangkan duplikasi data.
+
+ 
+Tugas:
+
+Tampilkan nama_customer dan alamat dari tabel ms_pelanggan dan hilangkan data duplikat. Jika benar, maka Live Code Editor akan menampilkan tabel seperti berikut pada console. 
+
+Jika dihitung jumlah row data yang berbeda maka diperoleh ada 10 row data berbeda dari tabel ms_pelanggan.
+
+ 
+ 
+ 
+ Menggunakan Prefix pada Nama Kolom
+
+“Agar kamu lebih jelas, saya coba praktikkan untuk kamu ya, Aksara.  Pertama, kita mulai dengan menggunakan prefix pada kolom. Pada dasarnya, penulisan nama kolom yang lengkap perlu mencantumkan nama tabel di depan nama kolom tersebut, dengan tanda penyambung berupa tanda titik. Umumnya, jika kita hanya mengambil kolom dari satu tabel, prefix ini jarang digunakan karena sudah jelas dari tabel mana kolom itu berasal. Tetapi ketika kita mengambil data dari dua tabel, misalnya dengan menggabungkan 2 tabel menggunakan JOIN, dan terdapat 2 kolom dengan nama yang sama, maka penggunaan prefix menjadi penting untuk menghindari error karena ambiguitas,” jelas Senja panjang lebar.
+
+Aku masih menyimak pada layar laptop Senja yang menunjukkan syntax dasar dari penggunaan prefix pada nama kolom.
+
+Untuk mengambil nama kolom nama_produk data dari tabel ms_produk dengan penulisan prefix nama tabel adalah sebagai berikut.
+
+Jika berjalan dengan lancar maka akan mendapatkan hasil berikut.
+
+Penggunaan nama lengkap prefix ini akan sangat berguna ketika ingin mengidentifikasi data dari beberapa tabel, yang akan dipelajari pada course SQL untuk topik JOIN.
+
+ 
+Tugas:
+
+Gantilah seluruh code yang ada pada code editor dengan perintah SELECT untuk menampilkan kolom kode_produk dari tabel ms_produk dengan penulisan menggunakan prefix nama tabel.
+
+Jika berjalan dengan lancar maka hasilnya akan terlihat sebagai berikut.
+
+
+Menggunakan Alias pada Kolom
+
+Selain prefix, aku dapat mengubah identitas nama kolom yang diambil dengan SELECT dengan menggunakan keyword AS. Ini dinamakan alias. Perubahan nama tabel bersifat temporary, artinya hanya berubah ketika mengambil/meng-query data, sedangkan nama kolom di tabel dalam database tidak akan berubah.
+
+ 
+
+Berikut adalah contoh untuk mengubah nama kolom dari kode_produk menjadi product_code dari table ms_produk.
+
+Ketik dan jalankan code tersebut pada code editor, jika berjalan dengan lancar akan muncul hasil sebagai berikut.
+
+Terlihat kolom kode_produk telah berubah nama menjadi product_code.
+
+Catatan: alias tidak bisa digunakan untuk wildcard (*)
+
+ 
+Tugas:
+
+Coba ubah perintah SELECT di atas untuk mengubah nama kolom dengan details berikut:
+
+    no_urut menjadi nomor.
+    nama_produk menjadi nama.
+
+Jika berjalan lancar, maka akan muncul hasil berikut.
+
+Menghilangkan Keyword 'AS'
+
+Keyword AS yang digunakan sebagai penanda alias pada kolom dapat dihilangkan dengan syntax:
+
+ 
+
+Berikut adalah contoh yang sama dari sub-chapter sebelumnya, dimana untuk mengubah nama kolom dari kode_produk menjadi product_code dari tabel ms_produk dapat dilakukan tanpa menggunakan alias. 
+
+Cobalah jalankan, dan hasilnya akan terlihat sebagai berikut.
+
+ 
+Tugas:
+
+Ubah nama kolom dari tabel ms_produk tanpa menggunakan Alias:
+
+    no_urut menjadi nomor.
+    nama_produk menjadi nama.
+
+Jika berjalan lancar, maka Live Code Editor akan menampilkan hasil berikut:
+
+
+
+Menggabungkan Prefix dan Alias
+
+Prefix dan alias juga dapat digunakan secara bersamaan.
+
+Aku menerapkannya dengan tabel ms_produk, menggunakan prefix nama tabel dan alias untuk merubah nama_produk menjadi nama. 
+
+Jika berjalan dengan lancar, maka akan muncul hasil berikut.
+
+ 
+Tugas:
+
+Tampilkan kolom harga dari tabel ms_produk dengan nama alias harga_jual lengkap dengan prefix.
+
+Jika berjalan dengan lancar, Live Code Editor akan mengeluarkan hasil sebagai berikut.
+
+ 
+ Menggunakan Alias pada Tabel
+
+Selain kolom, nama alias juga bisa digunakan untuk tabel dengan menggunakan keyword AS setelah nama tabel. Dan, keyword ini juga bisa digunakan atau tidak. Umumnya penggunaan alias pada tabel jika nama tabel tersebut cukup panjang dan muncul atau dirujuk beberapa kali dalam query. Sehingga dengan menggunakan alias pada tabel, dapat menghemat waktu dalam menuliskan query, khususnya untuk query yang cukup rumit, panjang dan melibatkan banyak tabel.
+
+Penulisannya adalah sebagai berikut.
+
+Berikut adalah contoh untuk menggunakan alias pada tabel ms_produk menjadi t1.
+
+Jika berjalan dengan lancar maka akan memberi hasil berikut.
+
+Terlihat hasil yang dikeluarkan adalah seluruh isi tabel ms_produk.
+
+ 
+Tugas:
+
+Ganti nama tabel ms_produk menjadi t2 dan tampilkan seluruh isinya tanpa menggunakan keyword AS.
+
+
+ 
+Prefix dengan Alias Tabel
+
+Aku menyela sebentar penjelasan Senja karena masih penasaran mengenai Prefix ini.
+
+“Nja, kalau kita menggunakan alias tabel, maka nama prefix yang digunakan untuk kolom adalah alias tabel dan bukan nama original tabel, seperti yang ditunjukkan berikut ini. Gimana hasilnya?”
+
+ 
+
+“Penggunaan nama original tabel sebagai prefix akan menimbulkan error saat query dijalankan karena dengan penggunaan alias, nama tabel secara temporary sudah di-gantikan oleh alias, Aksara,” jawab Senja lugas.
+
+Aku mengangguk. Senja pun kembali melanjutkan penjelasannya.
+
+Mari lihat contoh berikut ini dari tabel ms_produk yang telah digunakan sebelumnya
+
+Jalankan dan jika berhasil dengan baik maka akan memunculkan hasil berikut.
+
+ 
+
+Jika kolom dan tabel memiliki alias, dapat dilakukan dengan mengetikkan perintah berikut di code editor
+
+“Oke, Nja. Sekarang aku sudah paham syntax query,” ujarku bersemangat.
+
+Dari apa yang ditunjukkan Senja, aku bisa mengetahui kalau Senja menggunakan alias tabel yaitu t1, prefix untuk kolom adalah t1, dan alias untuk nama kolom. Maka itu, hasil yang diperoleh dengan menjalankan query adalah seperti ini:
+
+ 
+ Kesimpulan
+
+Aku kembali mengambil catatanku dan menuliskan apa yang telah aku pelajari:
+
+    Perintah SELECT dapat ditulis dengan variasi identitas kolom dan tabel berupa prefix dan alias.
+        Penulisan lengkap untuk nama kolom adalah prefix berupa nama tabel disertai tanda titik sebelum nama kolom itu sendiri.
+        Alias adalah nama lain yang diberikan untuk kolom maupun tabel.
+        Alias dapat digunakan dengan keyword AS atau tanpa keyword AS setelah nama kolom dan tabel.
+        Prefix nama tabel bisa menggunakan alias.
+
+Pemahaman mengenai prefix dan alias akan mendorong kemampuan identifikasi tabel maupun kolom yang terlibat untuk perintah SELECT yang lebih kompleks.
+
+ 
+ Menggunakan WHERE
+
+Klausul WHERE dari SELECT digunakan untuk memfilter data berdasarkan kondisi tertentu. Untuk syntax lengkapnya adalah sebagai berikut.
+
+Kondisi paling sederhana memiliki format sebagai berikut
+
+       [nama_kolom] = 'nilai_untuk_filter'
+
+ 
+
+Biar lebih jelasnya, mari langsung contohkan dengan perintah berikut.
+
+Jika dijalankan dengan baik, Live Code Editor akan menampilkan hasil berikut.
+
+Terlihat hanya satu baris data saja yang dikeluarkan dari total sepuluh, yaitu data dimana kolom nama_produk berisi nilai 'Gantungan Kunci DQLab'. 
+
+ 
+Tugas:
+
+Cobalah ubah perintah SELECT pada code editor untuk mengeluarkan data dengan nama_produk bernilai 'Tas Travel Organizer DQLab'. Jika semua berjalan dengan lancar, maka hasilnya akan terlihat sebagai berikut.
+
+
+Menggunakan Operand OR
+
+Pada subbab sebelumnya, aku telah menggunakan filter teks sederhana untuk mengeluarkan data masing-masing dengan nama_produk 'Gantungan Kunci DQLab' dan 'Tas Travel Organizer DQLab'.
+
+Pertanyaannya, bagaimana jika ingin mengeluarkan keduanya sekaligus? Aku bisa menggunakan Operand OR.
+
+ 
+
+Untuk memunculkan hasil query yang memuat data produk dengan nama_produk 'Gantungan Kunci DQLab' dan 'Tas Travel Organizer DQLab', aku dapat menggunakan logika sederhana, yaitu: Aku perlu mengambil data dengan kondisi nama_produk itu bernilai 'Gantungan Kunci DQLab' ATAU 'Tas Travel Organizer DQLab'. Logika ini bisa dinotasikan dengan menggunakan logika OR.
+
+ 
+
+Sehingga, dengan menggunakan logika OR, aku dapat menggabungkan dua atau lebih kondisi untuk memfilter data. Jadi, untuk menyelesaikan problem yaitu memunculkan data dengan kondisi kolom nama_produk bernilai 'Gantungan Kunci DQLab' ATAU 'Tas Travel Organizer DQLab', dapat menggunakan syntax berikut:
+
+Jika dijalankan dengan baik maka hasilnya akan tampak sebagai berikut.
+
+Terlihat bukan hanya satu baris data, tapi terdapat dua baris data yang diambil karena memenuhi kondisi yang diberikan pada perintah SELECT.
+
+ 
+Tugas:
+
+Tambahkan nama_produk 'Flashdisk DQLab 64 GB' ke dalam tabel. Jika berjalan dengan lancar, maka hasilnya terlihat sebagai berikut.
+
+ 
+ Filter untuk Angka
+
+Sebelumnya, aku telah melakukan filtering untuk teks, namun WHERE tidak terbatas untuk tipe data teks saja tapi malah umumnya untuk angka.
+
+Berikut adalah contoh filter dimana kolom harga harus memiliki nilai di bawah 50000.
+
+ 
+
+Jika dijalankan, maka aku akan mendapatkan tiga baris data sebagai berikut.
+
+Terlihat seluruh data yang diambil memiliki kondisi harga di bawah 50000.
+
+ 
+Tugas:
+
+Tampilkan informasi dengan harga diatas 50000. Jika berjalan dengan lancar, maka akan mendapatkan hasil berikut.
+
+
+
+Menggunakan Operand AND
+
+Jika sebelumnya aku mempelajari Operand OR, aku juga bisa menggunakan operand AND agar dua atau lebih kondisi terpenuhi semuanya. Jika salah satu kondisi tidak terpenuhi, data tidak akan diambil. Secara umum syntaxnya diilustrasikan berikut ini
+
+ 
+
+Berikut adalah contoh dimana kedua kondisi digunakan dengan penghubung AND.
+
+Jika dijalankan dengan baik, maka akan menampilkan
+
+Tidak ada hasil yang keluar! Loh? Bingung? 
+
+Iya, karena tidak ada nama_produk yang mengandung “Gantungan Kunci DQLab” dan dengan harga di atas 50,000, sehingga tidak ada hasil yang keluar karena kedua kondisi tersebut tidak terpenuhi.
+
+ 
+Tugas:
+
+Cobalah ganti kondisi contoh di atas dimana harga menjadi lebih kecil dari 50000, dengan nama_produk yang sama.
+
+Kali ini jika dijalankan maka akan memunculkan satu data sebagai berikut.
+
+
+
+Kesimpulan
+
+Wah, semakin seru saja nih belajar SQL! Sebelum aku lupa, aku mencatat apa yang aku pelajari tadi. Siapa yang punya kebiasaan seperti aku? Dengan mencatat apa yang aku pelajari, aku merasa ilmu yang aku pelajari tadi lebih mudah untuk aku pahami.
+
+    Filter di SQL diimplementasikan dengan menggunakan WHERE diikuti dengan satu atau lebih kondisi logis.
+    Kondisi logis ini memiliki format nama kolom diikuti dengan nilai yang akan difilter. Untuk teks sederhana bisa menggunakan tanda sama dengan, sedangkan untuk nilai angka bisa menggunakan operator perbandingan matematika.
+    Aku juga bisa menggunakan operand OR dan AND untuk menggabungkan beberapa kondisi menjadi satu kondisi baru yang harus terpenuhi untuk pengambilan data.
+
+
+
+Proyek dari Cabang A
+
+“Jadi, apakah kamu bisa menyiapkan data transaksi penjualan dengan total revenue >= IDR 100.000? 
+
+Format datanya yang akan kamu tampilkan adalah: kode_pelanggan, nama_produk, qty, harga, dan total, serta diurutkan mulai dari total revenue terbesar,” pinta Senja padaku.
+
+ 
+
+Kalau kasusnya seperti ini, berarti aku perlu meng-query data tersebut dari tabel tr_penjualan yang terdapat di database perusahaan.
+
+Aku dapat melakukan
+
+    perkalian antara kolom qty dan harga untuk memperoleh total revenue setiap kode pelanggan yang dinyatakan ke dalam kolom total, dan
+    menggunakan “ORDER BY total DESC” pada akhir query untuk mengurutkan data.
+
+ 
+
+Aku pun menerima tantangan proyek ini! Senja pun segera mengirim detailnya melalui email yang berisi contoh tabel sebagai berikut untuk segera kukerjakan.
+
+ coding : 
+ SELECT kode_pelanggan, nama_produk,qty,harga,qty * harga AS total FROM tr_penjualan WHERE qty * harga >= 100000 ORDER BY total DESC;
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+ 
+ 
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+

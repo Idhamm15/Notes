@@ -1,0 +1,13 @@
+coding sql
+
+membuat kolom :
+alter table mahasiwa add column dosen varchar(100);
+
+menghapus table mahasiswa drop dosen;
+
+
+cara mengubah column dan mengubah yipe data:
+alter table mahasiswa CHANGE dosen id_dosen int (2); 
+
+
+
